@@ -5,4 +5,5 @@ from torch.nn import functional as F
 
 
 def main():
-    print('Hello, World!')
+    train_images = np.fromfile('train-images-idx3-ubyte', dtype=np.uint8)
+    print(train_images)
