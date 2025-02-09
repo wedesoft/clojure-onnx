@@ -8,7 +8,9 @@ from torch.utils.data import DataLoader, Dataset
 
 class MNISTData(Dataset):
     def __init__(self, images_file_name, labels_file_name):
+        # Read images (skip magic, length, height, and width integers)
         self.images = np.fromfile(images_file_name, dtype=np.uint8)[16:].reshape(-1, 28, 28)
+        # Read labels (skip magic and length integer)
         self.labels = np.fromfile(labels_file_name, dtype=np.uint8)[8:]
 
     def __len__(self):
@@ -42,7 +44,6 @@ class MNISTNet(nn.Module):
 
 
 def main():
-    # Read labels (skip magic and length integer)
     train_data = MNISTData('train-images-idx3-ubyte', 'train-labels-idx1-ubyte')
     test_data = MNISTData('t10k-images-idx3-ubyte', 't10k-labels-idx1-ubyte')
 
