@@ -1,4 +1,6 @@
 *.gz
+*.onnx
 t10k-*
 train-*
+.cpcache
 __pycache__
