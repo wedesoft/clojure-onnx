@@ -5,6 +5,7 @@ description = "Train model on MNIST data"
 dependencies = [
   "numpy == 2.2.2",
   "torch == 2.6.0",
+  "onnx == 1.17.0",
 ]
 requires-python = ">=3.11"
 
