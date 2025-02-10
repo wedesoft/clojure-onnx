@@ -28,10 +28,10 @@
 
 ; https://gist.github.com/jamesthompson/3344090
 
-(def app-state (atom {:image "debian.png"}))
+(def app-state (atom {:index 0}))
 
 (defn event-handler [& args]
-  (swap! app-state update :image (constantly (digit->image (read-digit 0)))))
+  (swap! app-state update :index inc))
 
 (defn display-image [{:keys [image]}]
   {:fx/type :image-view
@@ -44,13 +44,14 @@
    :text "Next"
    :on-action event-handler})
 
-(defn root [{:keys [image]}]
-  {:fx/type :stage
-   :showing true
-   :title "MNIST"
-   :scene {:fx/type :scene
-           :root {:fx/type :v-box
-                  :children [{:fx/type display-image :image image} {:fx/type next-button}]}}})
+(defn root [{:keys [index]}]
+  (let [digit (read-digit index)]
+    {:fx/type :stage
+     :showing true
+     :title "MNIST"
+     :scene {:fx/type :scene
+             :root {:fx/type :v-box
+                    :children [{:fx/type display-image :image (digit->image digit)} {:fx/type next-button}]}}}))
 
 (def renderer
   (fx/create-renderer
