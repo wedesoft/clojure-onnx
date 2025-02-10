@@ -17,6 +17,8 @@
 (defn display-image [{:keys [image]}]
   {:fx/type :image-view
    ; :image (javafx.scene.image.Image. "debian.png")
+   :fit-width 256
+   :fit-height 256
    :image image
    })
 
