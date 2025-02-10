@@ -44,8 +44,8 @@ class MNISTNet(nn.Module):
 
 
 def main():
-    train_data = MNISTData('train-images-idx3-ubyte', 'train-labels-idx1-ubyte')
-    test_data = MNISTData('t10k-images-idx3-ubyte', 't10k-labels-idx1-ubyte')
+    train_data = MNISTData('data/train-images-idx3-ubyte', 'data/train-labels-idx1-ubyte')
+    test_data = MNISTData('data/t10k-images-idx3-ubyte', 'data/t10k-labels-idx1-ubyte')
 
     train_loader = DataLoader(train_data, batch_size=64)
     test_loader = DataLoader(test_data, batch_size=64)
