@@ -16,17 +16,16 @@
     (.write out (.readNBytes in (* 28 28)))
     (.toByteArray out)))
 
+; https://gist.github.com/jamesthompson/3344090
 (defn digit->image [data]
   (let [image  (java.awt.image.BufferedImage. 28 28 java.awt.image.BufferedImage/TYPE_BYTE_GRAY)
         raster (.getRaster image)
-        out    (ByteArrayOutputStream.)
-        ]
+        out    (ByteArrayOutputStream.)]
     (.setDataElements raster 0 0 28 28 data)
     (javax.imageio.ImageIO/write image "png" out)
     (.flush out)
     (javafx.scene.image.Image. (ByteArrayInputStream. (.toByteArray out)))))
 
-; https://gist.github.com/jamesthompson/3344090
 
 (def app-state (atom {:index 0}))
 
