@@ -1,13 +1,20 @@
 (ns infer.core
-    (:require [cljfx.api :as fx])
-    (:import [ai.onnxruntime OrtEnvironment OrtSession]
-             [javafx.application Platform]))
+    (:require [clojure.java.io :as io]
+              [cljfx.api :as fx])
+    (:import [java.io ByteArrayOutputStream]
+             [javafx.application Platform]
+             [ai.onnxruntime OrtEnvironment OrtSession]))
 
 (def environment (OrtEnvironment/getEnvironment))
 
-(defn load-model
-  [filename]
-  (-> environment (.createSession filename)))
+(def mnist (-> environment (.createSession "mnist.onnx")))
+
+(def test-data
+  (with-open [in (io/input-stream "data/t10k-images-idx3-ubyte")
+              out (ByteArrayOutputStream.)]
+    (.skip in 16)
+    (io/copy in out)
+    (.toByteArray out)))
 
 (def app-state (atom {:image "debian.png"}))
 
@@ -19,8 +26,7 @@
    ; :image (javafx.scene.image.Image. "debian.png")
    :fit-width 256
    :fit-height 256
-   :image image
-   })
+   :image image})
 
 (defn next-button [_]
   {:fx/type :button
@@ -42,7 +48,3 @@
 (defn -main [& args]
   (Platform/setImplicitExit true)
   (fx/mount-renderer app-state renderer))
-
-;(defn -main [& args]
-;  (let [model (load-model "mnist.onnx")]
-;    ))
