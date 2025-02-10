@@ -12,7 +12,7 @@
 (defn read-digit [n]
   (with-open [in (io/input-stream "data/t10k-images-idx3-ubyte")
               out (ByteArrayOutputStream.)]
-    (.skip in (+ 16 (* n 784)))
+    (.skip in (+ 16 (* n 28 28)))
     (.write out (.readNBytes in (* 28 28)))
     (.toByteArray out)))
 
@@ -24,7 +24,6 @@
     (javax.imageio.ImageIO/write image "png" out)
     (.flush out)
     (javafx.scene.image.Image. (ByteArrayInputStream. (.toByteArray out)))))
-
 
 (def app-state (atom {:index (rand-int 10000)}))
 
