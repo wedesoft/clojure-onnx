@@ -14,3 +14,8 @@ Run model training
 ```Shell
 poetry run train
 ```
+
+Run inference
+```Shell
+clj -M:infer
+```
