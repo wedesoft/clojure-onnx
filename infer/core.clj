@@ -16,7 +16,6 @@
     (.write out (.readNBytes in (* 28 28)))
     (.toByteArray out)))
 
-; https://gist.github.com/jamesthompson/3344090
 (defn digit->image [data]
   (let [image  (java.awt.image.BufferedImage. 28 28 java.awt.image.BufferedImage/TYPE_BYTE_GRAY)
         raster (.getRaster image)

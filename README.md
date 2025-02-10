@@ -19,3 +19,7 @@ Run inference
 ```Shell
 clj -M:infer
 ```
+
+## External Links
+
+* [JavaFX image from a byte array](https://gist.github.com/jamesthompson/3344090)
