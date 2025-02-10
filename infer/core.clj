@@ -12,9 +12,7 @@
 (def app-state (atom {:image "debian.png"}))
 
 (defn event-handler [& args]
-  (println "Event handler called")
-  (swap! app-state update :image "debian2.png")
-  nil)
+  (swap! app-state update :image (constantly "debian2.png")))
 
 (defn display-image [{:keys [image]}]
   {:fx/type :image-view
@@ -25,8 +23,7 @@
 (defn next-button [_]
   {:fx/type :button
    :text "Next"
-  ; :on-action event-handler
-   })
+   :on-action event-handler})
 
 (defn root [{:keys [image]}]
   {:fx/type :stage
@@ -38,7 +35,7 @@
 
 (def renderer
   (fx/create-renderer
-    :middleware (fx/wrap-map-desc assoc :fx/type root)))
+   :middleware (fx/wrap-map-desc assoc :fx/type root)))
 
 (defn -main [& args]
   (Platform/setImplicitExit true)
