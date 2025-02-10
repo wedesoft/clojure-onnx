@@ -26,10 +26,10 @@
     (javafx.scene.image.Image. (ByteArrayInputStream. (.toByteArray out)))))
 
 
-(def app-state (atom {:index 0}))
+(def app-state (atom {:index (rand-int 10000)}))
 
 (defn event-handler [& args]
-  (swap! app-state update :index inc))
+  (swap! app-state update :index (fn [_] (rand-int 10000))))
 
 (defn display-image [{:keys [image]}]
   {:fx/type :image-view
