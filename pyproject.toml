@@ -10,4 +10,4 @@ dependencies = [
 requires-python = ">=3.11"
 
 [project.scripts]
-train = "train.train:main"
+train = "train.main:main"
