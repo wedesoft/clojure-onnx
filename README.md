@@ -5,7 +5,7 @@ Download MNIST dataset
 make mnist
 ```
 
-Install PyTorch and Numpy
+Install Python dependencies
 ```Shell
 poetry install
 ```
