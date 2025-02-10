@@ -1,0 +1,3 @@
+{:deps {com.microsoft.onnxruntime/onnxruntime {:mvn/version "1.17.1"}}
+ :paths ["."]
+ :aliases {:run {:main-opts ["-m" "infer.core"]}}}
