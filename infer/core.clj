@@ -9,35 +9,40 @@
   [filename]
   (-> environment (.createSession filename)))
 
-(defn display-image [image]
+(def app-state (atom {:image "debian.png"}))
+
+(defn event-handler [& args]
+  (println "Event handler called")
+  (swap! app-state update :image "debian2.png")
+  nil)
+
+(defn display-image [{:keys [image]}]
   {:fx/type :image-view
-   :image (javafx.scene.image.Image. "debian.png")})
+   ; :image (javafx.scene.image.Image. "debian.png")
+   :image image
+   })
 
-(defmulti event-handler :event/type)
+(defn next-button [_]
+  {:fx/type :button
+   :text "Next"
+  ; :on-action event-handler
+   })
 
-(defmethod event-handler :default [event]
-  (prn event))
-
-; key press event handler
-(defmethod event-handler :key-pressed [event]
-  (prn "key press" event))
-
-(defn root [& args]
+(defn root [{:keys [image]}]
   {:fx/type :stage
    :showing true
    :title "MNIST"
    :scene {:fx/type :scene
            :root {:fx/type :v-box
-                  :padding 25
-                  :spacing 40
-                  :children [{:fx/type display-image}]}}})
+                  :children [{:fx/type display-image :image image} {:fx/type next-button}]}}})
 
 (def renderer
-  (fx/create-renderer))
+  (fx/create-renderer
+    :middleware (fx/wrap-map-desc assoc :fx/type root)))
 
 (defn -main [& args]
   (Platform/setImplicitExit true)
-  (renderer {:fx/type root}))
+  (fx/mount-renderer app-state renderer))
 
 ;(defn -main [& args]
 ;  (let [model (load-model "mnist.onnx")]
