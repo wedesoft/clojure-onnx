@@ -10,11 +10,9 @@
 (def mnist (-> environment (.createSession "mnist.onnx")))
 
 (defn read-digit [n]
-  (with-open [in (io/input-stream "data/t10k-images-idx3-ubyte")
-              out (ByteArrayOutputStream.)]
+  (with-open [in (io/input-stream "data/t10k-images-idx3-ubyte")]
     (.skip in (+ 16 (* n 28 28)))
-    (.write out (.readNBytes in (* 28 28)))
-    (.toByteArray out)))
+    (.readNBytes in (* 28 28))))
 
 (defn digit->image [data]
   (let [image  (java.awt.image.BufferedImage. 28 28 java.awt.image.BufferedImage/TYPE_BYTE_GRAY)
