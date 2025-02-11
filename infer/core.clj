@@ -2,8 +2,9 @@
     (:require [clojure.java.io :as io]
               [cljfx.api :as fx])
     (:import [java.io ByteArrayOutputStream ByteArrayInputStream]
+             [java.nio FloatBuffer]
              [javafx.application Platform]
-             [ai.onnxruntime OrtEnvironment OrtSession]))
+             [ai.onnxruntime OrtEnvironment OrtSession OnnxTensor]))
 
 (def environment (OrtEnvironment/getEnvironment))
 
@@ -13,6 +14,26 @@
   (with-open [in (io/input-stream "data/t10k-images-idx3-ubyte")]
     (.skip in (+ 16 (* n 28 28)))
     (.readNBytes in (* 28 28))))
+
+(defn feature-scaling [digit]
+  (float-array (map #(/ % 255.0) digit)))
+
+(defn argmax [arr]
+  (first
+    (reduce (fn [[result maximum] [index value]] (if (> value maximum) [index value] [result maximum]))
+            [0 (first arr)]
+            (map vector (range) arr))))
+
+(defn inference [digit]
+  (let [scaled        (feature-scaling digit)
+        input-buffer  (FloatBuffer/wrap scaled)
+        inputs        {"input" (OnnxTensor/createTensor environment input-buffer (long-array [1 1 28 28]))}
+        outputs       (.run mnist inputs)
+        output-tensor (.get (.get outputs "output"))
+        output-buffer (.getFloatBuffer output-tensor)
+        result        (float-array 10)]
+    (.get output-buffer result)
+    (argmax result)))
 
 (defn digit->image [data]
   (let [image  (java.awt.image.BufferedImage. 28 28 java.awt.image.BufferedImage/TYPE_BYTE_GRAY)
@@ -40,13 +61,17 @@
    :on-action event-handler})
 
 (defn root [{:keys [index]}]
-  (let [digit (read-digit index)]
+  (let [digit  (read-digit index)
+        result (inference digit)]
     {:fx/type :stage
      :showing true
      :title "MNIST"
      :scene {:fx/type :scene
              :root {:fx/type :v-box
-                    :children [{:fx/type display-image :image (digit->image digit)} {:fx/type next-button}]}}}))
+                    :children [{:fx/type display-image :image (digit->image digit)}
+                               {:fx/type :h-box
+                                :children [{:fx/type next-button}
+                                           {:fx/type :label :text (str result)}]}]}}}))
 
 (def renderer
   (fx/create-renderer

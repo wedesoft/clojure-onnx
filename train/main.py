@@ -40,7 +40,7 @@ class MNISTNet(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.dropout(x, p=0.2, training=self.training)
         x = self.fc2(x)
-        return F.log_softmax(x, dim=1)
+        return F.softmax(x, dim=1)
 
 
 def main():
@@ -53,7 +53,7 @@ def main():
     model = MNISTNet()
     loss = nn.CrossEntropyLoss()
     # Adam optimizer
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.005)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     for epoch in range(25):
         for x, y in train_loader:
@@ -72,4 +72,8 @@ def main():
         print('Accuracy: {}'.format(correct / total))
 
     # Save model as ONNX
-    torch.onnx.export(model, torch.randn(1, 1, 28, 28), 'mnist.onnx', input_names=['input'], output_names=['output'])
+    torch.onnx.export(model,
+                      (torch.randn((1, 1, 28, 28), dtype=torch.float),),
+                      'mnist.onnx',
+                      input_names=['input'],
+                      output_names=['output'])
