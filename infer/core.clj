@@ -15,8 +15,11 @@
     (.skip in (+ 16 (* n 28 28)))
     (.readNBytes in (* 28 28))))
 
+(defn byte->ubyte [b]
+  (if (>= b 0) b (+ b 256)))
+
 (defn feature-scaling [digit]
-  (float-array (map #(/ % 255.0) digit)))
+  (float-array (map #(/ (byte->ubyte %) 255.0) digit)))
 
 (defn argmax [arr]
   (first
@@ -68,10 +71,14 @@
      :title "MNIST"
      :scene {:fx/type :scene
              :root {:fx/type :v-box
+                    :padding 3
+                    :spacing 5
                     :children [{:fx/type display-image :image (digit->image digit)}
                                {:fx/type :h-box
+                                :padding 3
+                                :spacing 5
                                 :children [{:fx/type next-button}
-                                           {:fx/type :label :text (str result)}]}]}}}))
+                                           {:fx/type :label :text (str "result =" result)}]}]}}}))
 
 (def renderer
   (fx/create-renderer
