@@ -88,7 +88,7 @@
                                 :padding 3
                                 :spacing 5
                                 :children [{:fx/type next-button}
-                                           {:fx/type :label :text (str "result =" result)}]}]}}}))
+                                           {:fx/type :label :text (str "result = " result)}]}]}}}))
 
 (def renderer
   "Renderer for cljfx GUI"
