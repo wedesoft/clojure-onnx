@@ -7,16 +7,21 @@ from torch.utils.data import DataLoader, Dataset
 
 
 class MNISTData(Dataset):
+
     def __init__(self, images_file_name, labels_file_name):
+        """Read MNIST images and labels from specified files"""
+        super(MNISTData, self).__init__()
         # Read images (skip magic, length, height, and width integers)
         self.images = np.fromfile(images_file_name, dtype=np.uint8)[16:].reshape(-1, 28, 28)
         # Read labels (skip magic and length integer)
         self.labels = np.fromfile(labels_file_name, dtype=np.uint8)[8:]
 
     def __len__(self):
+        """Return the number of images (or labels) in the dataset"""
         return len(self.labels)
 
     def __getitem__(self, idx):
+        """Return the image and label at the specified index"""
         image = torch.from_numpy(self.images[idx]).to(torch.float) / 255.0
         label = torch.zeros(10)
         label[self.labels[idx]] = 1
@@ -24,7 +29,9 @@ class MNISTData(Dataset):
 
 
 class MNISTNet(nn.Module):
+
     def __init__(self):
+        """Construct network with 2 convolutional layers and 2 fully connected layers"""
         super(MNISTNet, self).__init__()
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
         self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
@@ -33,6 +40,7 @@ class MNISTNet(nn.Module):
         self.fc2 = nn.Linear(50, 10)
 
     def forward(self, x):
+        """Perform forward pass of network"""
         x = x.view(-1, 1, 28, 28)
         x = F.relu(F.max_pool2d(self.conv1(x), 2))
         x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
