@@ -20,6 +20,8 @@ Run inference
 clj -M:infer
 ```
 
+![inference GUI screenshot](infer.png)
+
 ## External Links
 
 * [JavaFX image from a byte array](https://gist.github.com/jamesthompson/3344090)
