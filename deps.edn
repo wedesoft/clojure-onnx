@@ -1,4 +1,4 @@
-{:deps {com.microsoft.onnxruntime/onnxruntime {:mvn/version "1.17.1"}
+{:deps {com.microsoft.onnxruntime/onnxruntime {:mvn/version "1.20.0"}
         cljfx/cljfx {:mvn/version "1.9.3"}}
  :paths ["."]
  :aliases {:infer {:main-opts ["-m" "infer.core"]}}}
