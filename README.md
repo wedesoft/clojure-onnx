@@ -24,9 +24,12 @@ clj -M:infer
 
 ## External Links
 
-* [MNIST dataset](https://github.com/fgnt/mnist)
+* [The Current State of ML in Clojure](https://codewithkira.com/2024-04-04-state-of-clojure-ml.html)
+* [scicloj.ml.tribuo](https://github.com/scicloj/scicloj.ml.tribuo)
+* [Tribuo](https://tribuo.org/)
 * [Using ONNX models from Clojure](https://scicloj.github.io/clojure-data-tutorials/projects/ml/onnx/onnx.html)
-* [ONNX runtime](https://onnxruntime.ai/)
+* [MNIST dataset](https://github.com/fgnt/mnist)
 * [PyTorch](https://pytorch.org/)
+* [ONNX runtime](https://onnxruntime.ai/)
 * [Cljfx wrapper for JavaFX](https://github.com/cljfx/cljfx)
 * [JavaFX image from a byte array](https://gist.github.com/jamesthompson/3344090)
