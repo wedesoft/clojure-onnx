@@ -4,11 +4,14 @@
     (:import [java.io ByteArrayOutputStream ByteArrayInputStream]
              [java.nio FloatBuffer]
              [javafx.application Platform]
-             [ai.onnxruntime OrtEnvironment OrtSession OnnxTensor]))
+             [ai.onnxruntime OrtEnvironment OrtSession OrtSession$SessionOptions OnnxTensor]))
 
+(def device-id 0)
+(def options (OrtSession$SessionOptions.))
+(.addCUDA options device-id)
 (def environment (OrtEnvironment/getEnvironment))
 
-(def mnist (-> environment (.createSession "mnist.onnx")))
+(def mnist (-> environment (.createSession "mnist.onnx" options)))
 
 (defn read-digit [n]
   "Read a 28*28 gray-scale byte block from the MNIST dataset."
