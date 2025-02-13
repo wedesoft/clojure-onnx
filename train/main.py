@@ -6,6 +6,9 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader, Dataset
 
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 class MNISTData(Dataset):
 
     def __init__(self, images_file_name, labels_file_name):
@@ -58,15 +61,15 @@ def main():
     train_loader = DataLoader(train_data, batch_size=64)
     test_loader = DataLoader(test_data, batch_size=64)
 
-    model = MNISTNet()
+    model = MNISTNet().to(device)
     loss = nn.CrossEntropyLoss()
     # Adam optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     for epoch in range(25):
         for x, y in train_loader:
-            pred = model(x)
-            l = loss(pred, y)
+            pred = model(x.to(device))
+            l = loss(pred, y.to(device))
             optimizer.zero_grad()
             l.backward()
             optimizer.step()
@@ -74,14 +77,14 @@ def main():
         correct = 0
         total = 0
         for x, y in test_loader:
-            pred = model(x).argmax(dim=1)
-            correct += (pred == y.argmax(dim=1)).sum().item()
+            pred = model(x.to(device)).argmax(dim=1)
+            correct += (pred == y.to(device).argmax(dim=1)).sum().item()
             total += len(y)
         print('Accuracy: {}'.format(correct / total))
 
     # Save model as ONNX
     torch.onnx.export(model,
-                      (torch.randn((1, 1, 28, 28), dtype=torch.float),),
+                      (torch.randn((1, 1, 28, 28), dtype=torch.float).to(device),),
                       'mnist.onnx',
                       input_names=['input'],
                       output_names=['output'])
